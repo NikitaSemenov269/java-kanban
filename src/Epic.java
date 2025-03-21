@@ -20,7 +20,13 @@ public class Epic extends Task {
     public ArrayList<Integer> getIdSubtasks() {
         return idSubtasks;
     }
+
+    @Override
+    public String toString() {
+        return super.toString();
+    }
 }
+
 
 
 
