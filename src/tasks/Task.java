@@ -26,6 +26,7 @@ public class Task {
     public void setTaskStatus(TaskStatus taskStatus) {
         this.taskStatus = taskStatus;
     }
+
     public String getNameTask() { return nameTask;}
     public String getDescription() { return getDescription();}
     public int getId() {

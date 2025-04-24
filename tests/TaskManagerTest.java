@@ -1,11 +1,19 @@
+import managers.HistoryManager;
+import managers.Managers;
+import managers.TaskManager;
 import org.junit.jupiter.api.Test;
+import tasks.Epic;
+import tasks.Subtask;
+import tasks.Task;
+import tasks.TaskStatus;
+
 import java.util.HashMap;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 public class TaskManagerTest {
-//  убедитесь, что утилитарный класс всегда возвращает проинициализированные и готовые к работе экземпляры менеджеров;
+    //  убедитесь, что утилитарный класс всегда возвращает проинициализированные и готовые к работе экземпляры менеджеров;
     TaskManager taskManager = Managers.getDefault();
     HistoryManager historyManager = Managers.getDefaultHistory();
 
@@ -23,7 +31,7 @@ public class TaskManagerTest {
         assertEquals(task, tasks.get(0), "Задачи не совпадают.");
     }
 
-//      создайте тест, в котором проверяется неизменность задачи (по всем полям) при добавлении задачи в менеджер;
+    //      создайте тест, в котором проверяется неизменность задачи (по всем полям) при добавлении задачи в менеджер;
     @Test
     void add() {
         Task task = new Task("Test addNewTask", "Test addNewTask description");
@@ -41,7 +49,7 @@ public class TaskManagerTest {
 
     }
 
-//    проверьте, что InMemoryTaskManager действительно добавляет задачи разного типа и может найти их по id;
+    //    проверьте, что InMemoryTaskManager действительно добавляет задачи разного типа и может найти их по id;
 //    проверьте, что наследники класса Task равны друг другу, если равен их id;
     @Test
     void testMoreTips() {
@@ -63,7 +71,7 @@ public class TaskManagerTest {
         assertEquals(history.get(1), epic, "Задачи не совпадают.");
         assertEquals(history.get(2), subtask, "Задачи не совпадают.");
     }
-//  проверьте, что задачи с заданным id и сгенерированным id не конфликтуют внутри менеджера;
+    //  проверьте, что задачи с заданным id и сгенерированным id не конфликтуют внутри менеджера;
     @Test
     void addTasks() {
         Task taskFerst = new Task("Test addNewTask", "Test addNewTask description");
