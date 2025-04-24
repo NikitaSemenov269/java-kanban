@@ -15,6 +15,7 @@ public class InMemoryHistoryManagerTest {
         assertEquals(1, historyManager.getHistory().size(), "Значение списка истории не равно 1.");
         assertEquals(task, historyManager.getHistory().get(0), "Задачи не совпадают.");
     }
+
     //  убедитесь, что задачи, добавляемые в taskmanager.HistoryManager, сохраняют предыдущую версию задачи и её данных.
     @Test
     void addTasksInHistoryList() {

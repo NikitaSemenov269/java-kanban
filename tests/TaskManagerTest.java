@@ -71,6 +71,7 @@ public class TaskManagerTest {
         assertEquals(history.get(1), epic, "Задачи не совпадают.");
         assertEquals(history.get(2), subtask, "Задачи не совпадают.");
     }
+
     //  проверьте, что задачи с заданным id и сгенерированным id не конфликтуют внутри менеджера;
     @Test
     void addTasks() {

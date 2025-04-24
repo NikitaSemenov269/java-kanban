@@ -23,7 +23,7 @@ public class InMemoryHistoryManager implements HistoryManager {
         listOfIDTasksInHistory.put(taskId, newNode);
     }
 
-    private List<Task> getTasks(DoublyLinkedList <Task> resultingLinkedList) {
+    private List<Task> getTasks(DoublyLinkedList<Task> resultingLinkedList) {
         List<Task> taskHistory = new ArrayList<>();
         Node<Task> currentNode = resultingLinkedList.head;
         while (currentNode != null) {
@@ -65,8 +65,8 @@ public class InMemoryHistoryManager implements HistoryManager {
 
     @Override
     public void remove(int id) {
-        Node <Task> task =  listOfIDTasksInHistory.get(id);
-        if ( task != null) {
+        Node<Task> task = listOfIDTasksInHistory.get(id);
+        if (task != null) {
             removeNode(task);
         }
     }
