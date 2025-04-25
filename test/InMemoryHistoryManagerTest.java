@@ -28,15 +28,15 @@ public class InMemoryHistoryManagerTest {
         historyManager.add(task1);
 
         assertEquals(1, historyManager.getHistory().size(), "Значение списка истории не равно 1.");
-        assertEquals(task1, historyManager.getHistory().get(0), "Задачи не совпадают_1.");
+        assertEquals(task1, historyManager.getHistory().getLast(), "Задачи не совпадают_1.");
 
         Task task2 = new Task("Task_1", "Desc_1");
         taskManager.createTask(task2);
         historyManager.add(task2);
 
         assertEquals(2, historyManager.getHistory().size(), "Значение списка истории не равно 2.");
-        assertEquals(task1, historyManager.getHistory().get(0), "Задачи не совпадают_2.");
-        assertEquals(task2, historyManager.getHistory().get(1), "Задачи не совпадают_3.");
+        assertEquals(task1, historyManager.getHistory().get(1), "Задачи не совпадают_2.");
+        assertEquals(task2, historyManager.getHistory().get(0), "Задачи не совпадают_3.");
         assertNotEquals(historyManager.getHistory().get(0), historyManager.getHistory().get(1), "Задачи совпадают_1.");
     }
 
@@ -57,18 +57,18 @@ public class InMemoryHistoryManagerTest {
         historyManager.add(task3);
 
         assertEquals(3, historyManager.getHistory().size(), "Значение списка истории не равно 3_1.");
-        assertEquals(task1, historyManager.getHistory().get(0), "Задачи не совпадают_1.");
+        assertEquals(task1, historyManager.getHistory().get(2), "Задачи не совпадают_1.");
         assertEquals(task2, historyManager.getHistory().get(1), "Задачи не совпадают_2.");
-        assertEquals(task3, historyManager.getHistory().get(2), "Задачи не совпадают_3.");
+        assertEquals(task3, historyManager.getHistory().get(0), "Задачи не совпадают_3.");
 
         historyManager.add(task3);
         historyManager.add(task2);
         historyManager.add(task1);
 
         assertEquals(3, historyManager.getHistory().size(), "Значение списка истории не равно 3_2.");
-        assertEquals(task1, historyManager.getHistory().get(2), "Задачи не совпадают_4.");
+        assertEquals(task1, historyManager.getHistory().get(0), "Задачи не совпадают_4.");
         assertEquals(task2, historyManager.getHistory().get(1), "Задачи не совпадают_5.");
-        assertEquals(task3, historyManager.getHistory().get(0), "Задачи не совпадают_6.");
+        assertEquals(task3, historyManager.getHistory().get(2), "Задачи не совпадают_6.");
     }
 
     @Test
@@ -88,14 +88,14 @@ public class InMemoryHistoryManagerTest {
         historyManager.add(task3);
 
         assertEquals(3, historyManager.getHistory().size(), "Значение списка истории не равно 3_1.");
-        assertEquals(task1, historyManager.getHistory().get(0), "Задачи не совпадают_1.");
+        assertEquals(task1, historyManager.getHistory().get(2), "Задачи не совпадают_1.");
         assertEquals(task2, historyManager.getHistory().get(1), "Задачи не совпадают_2.");
-        assertEquals(task3, historyManager.getHistory().get(2), "Задачи не совпадают_3.");
+        assertEquals(task3, historyManager.getHistory().get(0), "Задачи не совпадают_3.");
 
         historyManager.remove(task2.getId());
 
         assertEquals(2, historyManager.getHistory().size(), "Значение списка истории не равно 2_1.");
-        assertEquals(task1, historyManager.getHistory().get(0), "Задачи не совпадают_4.");
-        assertEquals(task3, historyManager.getHistory().get(1), "Задачи не совпадают_5.");
+        assertEquals(task1, historyManager.getHistory().get(1), "Задачи не совпадают_4.");
+        assertEquals(task3, historyManager.getHistory().get(0), "Задачи не совпадают_5.");
     }
 }

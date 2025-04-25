@@ -67,9 +67,9 @@ public class TaskManagerTest {
         historyManager.add(subtask);
         final List<Task> history = historyManager.getHistory();
 
-        assertEquals(history.get(0), task, "Задачи не совпадают.");
+        assertEquals(history.get(2), task, "Задачи не совпадают.");
         assertEquals(history.get(1), epic, "Задачи не совпадают.");
-        assertEquals(history.get(2), subtask, "Задачи не совпадают.");
+        assertEquals(history.get(0), subtask, "Задачи не совпадают.");
     }
 
     //  проверьте, что задачи с заданным id и сгенерированным id не конфликтуют внутри менеджера;
