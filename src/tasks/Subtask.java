@@ -7,6 +7,7 @@ public class Subtask extends Task {
         super(nameTask, description);
         this.idEpic = idEpic;
     }
+
     public int getIdEpic() {
         return idEpic;
     }

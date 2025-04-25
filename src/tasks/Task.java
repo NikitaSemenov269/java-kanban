@@ -17,20 +17,31 @@ public class Task {
     public void setId(int id) {
         this.id = id;
     }
+
     public void setNameTask(String nameTask) {
         this.nameTask = nameTask;
     } //нужен для переопределения имени задачи.
+
     public void setDescription(String description) {
         this.description = description;
     } //нужен для переопр. описания.
+
     public void setTaskStatus(TaskStatus taskStatus) {
         this.taskStatus = taskStatus;
     }
-    public String getNameTask() { return nameTask;}
-    public String getDescription() { return getDescription();}
+
+    public String getNameTask() {
+        return nameTask;
+    }
+
+    public String getDescription() {
+        return getDescription();
+    }
+
     public int getId() {
         return id;
     }
+
     public TaskStatus getTaskStatus() {
         return taskStatus;
     }
@@ -41,6 +52,7 @@ public class Task {
         Task task = (Task) o;
         return id == task.id && Objects.equals(nameTask, task.nameTask) && Objects.equals(description, task.description) && taskStatus == task.taskStatus;
     }
+
     @Override
     public int hashCode() {
         return Objects.hash(id, nameTask, description, taskStatus);
