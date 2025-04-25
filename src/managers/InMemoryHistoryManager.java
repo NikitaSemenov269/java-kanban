@@ -9,28 +9,29 @@ import java.util.Map;
 
 public class InMemoryHistoryManager implements HistoryManager {
     private Map<Integer, Node<Task>> listOfIDTasksInHistory = new HashMap<>();
-    private DoublyLinkedList<Task> linkedList = new DoublyLinkedList<>();
+    private Node<Task> head;
+    private Node<Task> tail;
 
     private void linkLast(Task task, int taskId) {
         Node<Task> newNode = new Node<>(task);
         if (listOfIDTasksInHistory.isEmpty()) {
-            linkedList.head = newNode;
-            linkedList.tail = newNode;
+            head = newNode;
+            tail = newNode;
         } else {
-            linkedList.tail.next = newNode;
-            newNode.prev = linkedList.tail;
-            linkedList.tail = newNode;
-            linkedList.tail.next = null;
+            tail.next = newNode;
+            newNode.prev = tail;
+            tail = newNode;
+            tail.next = null;
         }
         listOfIDTasksInHistory.put(taskId, newNode);
     }
 
-    private List<Task> getTasks(DoublyLinkedList<Task> resultingLinkedList) {
+    private List<Task> getTasks() {
         List<Task> taskHistory = new ArrayList<>();
-        Node<Task> currentNode = resultingLinkedList.head;
+        Node<Task> currentNode = tail;
         while (currentNode != null) {
             taskHistory.add(currentNode.data);
-            currentNode = currentNode.next;
+            currentNode = currentNode.prev;
         }
         return new ArrayList<>(taskHistory);
     }
@@ -42,16 +43,16 @@ public class InMemoryHistoryManager implements HistoryManager {
         if (taskNode.prev != null) {
             taskNode.prev.next = taskNode.next;
         } else {
-            linkedList.head = taskNode.next;
+            head = taskNode.next;
         }
         if (taskNode.next != null) {
             taskNode.next.prev = taskNode.prev;
         } else {
-            linkedList.tail = taskNode.prev;
+            tail = taskNode.prev;
         }
         if (taskNode.prev == null && taskNode.next == null) {
-            linkedList.head = null;
-            linkedList.tail = null;
+            head = null;
+            tail = null;
         }
         listOfIDTasksInHistory.remove(taskNode.data.getId());
     }
@@ -75,7 +76,7 @@ public class InMemoryHistoryManager implements HistoryManager {
 
     @Override
     public List<Task> getHistory() {
-        return getTasks(linkedList);
+        return getTasks();
     }
 
 }
