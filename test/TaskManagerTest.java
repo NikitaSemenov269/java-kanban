@@ -1,13 +1,12 @@
-import managers.HistoryManager;
+import managers.interfaces.HistoryManager;
 import managers.Managers;
-import managers.TaskManager;
+import managers.interfaces.TaskManager;
 import org.junit.jupiter.api.Test;
 import tasks.Epic;
 import tasks.Subtask;
 import tasks.Task;
-import tasks.TaskStatus;
+import tasks.enums.TaskStatus;
 
-import java.util.HashMap;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;

@@ -1,17 +1,27 @@
 package tasks;
 
+import tasks.enums.TaskStatus;
+
 import java.util.Objects;
 
 public class Task {
-    protected int id;
-    protected String nameTask;
-    protected String description;
-    protected TaskStatus taskStatus;
+    private int id;
+    private String nameTask;
+    private String description;
+    private TaskStatus taskStatus;
 
     public Task(String nameTask, String description) {
         this.nameTask = nameTask;
         this.description = description;
         this.taskStatus = TaskStatus.NEW;
+    }
+
+    // Обеспечивает полное сохранение/получение данных в/из файла.
+    public Task(int id, String nameTask, String description, TaskStatus taskStatus) {
+        this.id = id;
+        this.nameTask = nameTask;
+        this.description = description;
+        this.taskStatus = taskStatus;
     }
 
     public void setId(int id) {
@@ -35,7 +45,7 @@ public class Task {
     }
 
     public String getDescription() {
-        return getDescription();
+        return description;
     }
 
     public int getId() {

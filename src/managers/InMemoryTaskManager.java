@@ -1,6 +1,9 @@
 package managers;
 
+import managers.interfaces.HistoryManager;
+import managers.interfaces.TaskManager;
 import tasks.*;
+import tasks.enums.TaskStatus;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -9,10 +12,14 @@ import java.util.Map;
 
 public class InMemoryTaskManager implements TaskManager {
     private int id = 0;
-    private Map<Integer, Task> tasks = new HashMap<>();
-    private Map<Integer, Subtask> subtasks = new HashMap<>();
-    private Map<Integer, Epic> epics = new HashMap<>();
+    protected Map<Integer, Task> tasks = new HashMap<>();
+    protected Map<Integer, Subtask> subtasks = new HashMap<>();
+    protected Map<Integer, Epic> epics = new HashMap<>();
     private HistoryManager historyManager = Managers.getDefaultHistory();
+
+    protected void setGenerateId(int maxId) {   // срабатывает при восстановлении данных из файла.
+        this.id = maxId;
+    }
 
     //  ГЕНЕРАЦИЯ ID.
     private int generateId() {
@@ -21,7 +28,7 @@ public class InMemoryTaskManager implements TaskManager {
 
     //  ОБНОВЛЕНИЕ СТАТУСА КОНКРЕТНОГО EPICа.
     private void updateTaskStatus(Epic epic) {
-        ArrayList<TaskStatus> flags = new ArrayList<>();
+        List<TaskStatus> flags = new ArrayList<>();
         for (int key : epic.getIdSubtasks()) {  //получаем значения id из списка конкретного Tasks.tasks.src.javakanban.Epic
             Subtask subtask = subtasks.get(key);  //получаем значения подзадач по ключам.
             flags.add(subtask.getTaskStatus());
@@ -63,22 +70,22 @@ public class InMemoryTaskManager implements TaskManager {
 
     //  ПОЛУЧЕНИЕ СПИСКА ВСЕХ ЗАДАЧ.
     @Override
-    public ArrayList<Task> getAllTasks() {
+    public List<Task> getAllTasks() {
         return new ArrayList<>(tasks.values());
     }
 
     @Override
-    public ArrayList<Epic> getAllEpics() {
+    public List<Epic> getAllEpics() {
         return new ArrayList<>(epics.values());
     }
 
     @Override
-    public ArrayList<Subtask> getAllSubtasks() {
+    public List<Subtask> getAllSubtasks() {
         return new ArrayList<>(subtasks.values());
     }
 
     @Override
-    public ArrayList<Subtask> getSubtasksOfEpic(Epic epic) {
+    public List<Subtask> getSubtasksOfEpic(Epic epic) {
         ArrayList<Subtask> subtasksEpics = new ArrayList<>();
         if (epics.containsValue(epic)) {
             for (int key : epic.getIdSubtasks()) {

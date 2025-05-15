@@ -1,6 +1,8 @@
 import managers.*;
+import managers.interfaces.TaskManager;
 import tasks.*;
 import org.junit.jupiter.api.Test;
+import tasks.enums.TaskStatus;
 
 import static org.junit.jupiter.api.Assertions.*;
 
