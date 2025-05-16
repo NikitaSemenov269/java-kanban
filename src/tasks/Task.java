@@ -16,14 +16,6 @@ public class Task {
         this.taskStatus = TaskStatus.NEW;
     }
 
-    // Обеспечивает полное сохранение/получение данных в/из файла.
-    public Task(int id, String nameTask, String description, TaskStatus taskStatus) {
-        this.id = id;
-        this.nameTask = nameTask;
-        this.description = description;
-        this.taskStatus = taskStatus;
-    }
-
     public void setId(int id) {
         this.id = id;
     }
@@ -70,11 +62,11 @@ public class Task {
 
     @Override
     public String toString() {
-        return "tasks.src.javakanban.Task{" +
+        return "Task{" +
                 "id=" + id +
                 ", nameTask='" + nameTask + '\'' +
                 ", description='" + description + '\'' +
-                ", taskStatus=" + taskStatus +
+                ", taskStatus=" + '\'' + taskStatus + '\'' +
                 '}';
     }
 }

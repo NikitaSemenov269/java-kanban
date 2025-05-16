@@ -17,12 +17,11 @@ public class InMemoryTaskManager implements TaskManager {
     protected Map<Integer, Epic> epics = new HashMap<>();
     private HistoryManager historyManager = Managers.getDefaultHistory();
 
-    protected void setGenerateId(int maxId) {   // срабатывает при восстановлении данных из файла.
-        this.id = maxId;
-    }
-
     //  ГЕНЕРАЦИЯ ID.
     private int generateId() {
+        if (id < CSVFormat.getGenerateId()) {
+            id = CSVFormat.getGenerateId();
+        }
         return ++id;
     }
 
@@ -60,11 +59,16 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public void createSubtasks(Subtask subtask) {
         subtask.setId(generateId());
-        if (epics.containsKey(subtask.getIdEpic())) {     //проверка наличия ключа в epics.
-            subtasks.put(subtask.getId(), subtask);       //добавление подзадачи в hashmap.
-            Epic epic = epics.get(subtask.getIdEpic());  //получаем экземпляр подходящего Tasks.tasks.src.javakanban.Epic.
-            epic.addIdSubtasks(subtask.getId());  //добавление id в список id хранящихся в Tasks.tasks.src.javakanban.Epic.
-            updateTaskStatus(epic);   //передаем требуемый экземпляр Tasks.tasks.src.javakanban.Epic в метод обновления статуса.
+        //проверка наличия ключа в epics.
+        if (epics.containsKey(subtask.getIdEpic())) {
+            //добавление подзадачи в hashmap.
+            subtasks.put(subtask.getId(), subtask);
+            //получаем экземпляр подходящего Tasks.tasks.src.javakanban.Epic.
+            Epic epic = epics.get(subtask.getIdEpic());
+            //добавление id в список id хранящихся в Tasks.tasks.src.javakanban.Epic.
+            epic.addIdSubtasks(subtask.getId());
+            //передаем требуемый экземпляр Tasks.tasks.src.javakanban.Epic в метод обновления статуса.
+            updateTaskStatus(epic);
         }
     }
 

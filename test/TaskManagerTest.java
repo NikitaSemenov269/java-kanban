@@ -1,6 +1,7 @@
 import managers.interfaces.HistoryManager;
 import managers.Managers;
 import managers.interfaces.TaskManager;
+import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import tasks.Epic;
 import tasks.Subtask;
@@ -12,12 +13,10 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class TaskManagerTest {
-    //  убедитесь, что утилитарный класс всегда возвращает проинициализированные и готовые к работе экземпляры менеджеров;
-    TaskManager taskManager = Managers.getDefault();
-    HistoryManager historyManager = Managers.getDefaultHistory();
 
     @Test
-    void addNewTask() {   //тест на создание задачи и проверку совпадения при одинаковом id
+    void addNewTask() {
+        TaskManager taskManager = Managers.getDefault();//тест на создание задачи и проверку совпадения при одинаковом id
         Task task = new Task("Test addNewTask", "Test addNewTask description");
         taskManager.createTask(task);
         final Task savedTask = taskManager.getTask(task.getId());
@@ -28,11 +27,14 @@ public class TaskManagerTest {
         assertNotNull(tasks, "Задачи не возвращаются.");
         assertEquals(1, tasks.size(), "Неверное количество задач.");
         assertEquals(task, tasks.get(0), "Задачи не совпадают.");
+
     }
 
     //      создайте тест, в котором проверяется неизменность задачи (по всем полям) при добавлении задачи в менеджер;
     @Test
     void add() {
+        TaskManager taskManager = Managers.getDefault();
+        HistoryManager historyManager = Managers.getDefaultHistory();
         Task task = new Task("Test addNewTask", "Test addNewTask description");
         taskManager.createTask(task);
         final Task savedTask = taskManager.getTask(task.getId());
@@ -45,13 +47,14 @@ public class TaskManagerTest {
         task = new Task("1_Test addNewTask_1", "1_Test addNewTask description_1");
         taskManager.updateTask(task);
         assertNotEquals(task, history.get(0), "Ошибка: Задачи совпали");
-
     }
 
     //    проверьте, что InMemoryTaskManager действительно добавляет задачи разного типа и может найти их по id;
 //    проверьте, что наследники класса Task равны друг другу, если равен их id;
     @Test
     void testMoreTips() {
+        TaskManager taskManager = Managers.getDefault();
+        HistoryManager historyManager = Managers.getDefaultHistory();
         Task task = new Task("Test addNewTask", "Test addNewTask description");
         Epic epic = new Epic("Test addNewTask", "Test addNewTask description");
         Subtask subtask = new Subtask("Test addNewTask", "Test addNewTask description",
@@ -74,10 +77,12 @@ public class TaskManagerTest {
     //  проверьте, что задачи с заданным id и сгенерированным id не конфликтуют внутри менеджера;
     @Test
     void addTasks() {
+        TaskManager taskManager = Managers.getDefault();
         Task taskFerst = new Task("Test addNewTask", "Test addNewTask description");
         taskManager.createTask(taskFerst);
         Task taskSecond = new Task("Test addNewTask", "Test addNewTask description");
-        taskSecond.setId(5);
+        taskManager.createTask(taskSecond);
+        taskSecond.setId(555);
         assertNotEquals(taskSecond, taskManager.getTask(taskFerst.getId()));
     }
 }

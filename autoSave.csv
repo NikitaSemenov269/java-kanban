@@ -1,4 +1,7 @@
-1,TASK,One,NEW,task,
-2,TASK,Two,NEW,task,
-3,EPIC,One,NEW,epic,
-4,SUBTASK,One,NEW,subtask,3
+1,TASK,One,NEW,task,,
+2,TASK,Two,NEW,task,,
+3,EPIC,One,NEW,epic,,6
+4,EPIC,Two,NEW,epic,,5
+7,EPIC,Three ,NEW,epic,,-1
+5,SUBTASK,One,NEW,subtask,4,-1
+6,SUBTASK,Two,NEW,subtask,3,-1

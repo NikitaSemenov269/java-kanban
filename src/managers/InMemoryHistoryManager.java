@@ -76,6 +76,11 @@ public class InMemoryHistoryManager implements HistoryManager {
     }
 
     @Override
+    public void removeAll() {
+        listOfIDTasksInHistory.clear();
+    }
+
+    @Override
     public List<Task> getHistory() {
         return getTasks();
     }

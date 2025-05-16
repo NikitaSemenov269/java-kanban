@@ -1,7 +1,5 @@
 package tasks;
 
-import tasks.enums.TaskStatus;
-
 import java.util.ArrayList;
 
 public class Epic extends Task {
@@ -9,10 +7,6 @@ public class Epic extends Task {
 
     public Epic(String nameEpic, String description) {
         super(nameEpic, description);
-    }
-
-    public Epic(int id, String nameEpic, String description, TaskStatus taskStatus) {
-        super(id, nameEpic, description, taskStatus);
     }
 
     public void addIdSubtasks(int id) {
@@ -33,6 +27,12 @@ public class Epic extends Task {
 
     @Override
     public String toString() {
-        return super.toString();
+        return "Epic{" +
+                "id=" + getId() +
+                ", nameTask='" + getNameTask() + '\'' +
+                ", description='" + getDescription() + '\'' +
+                ", taskStatus=" + getTaskStatus() +
+                ", idSubtasks=" + getIdSubtasks() +
+                '}';
     }
 }

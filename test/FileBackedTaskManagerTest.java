@@ -1,5 +1,6 @@
 import managers.*;
 import managers.interfaces.TaskManager;
+import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import tasks.Epic;
 import tasks.Subtask;
@@ -9,13 +10,13 @@ import tasks.enums.TaskStatus;
 import java.io.File;
 import java.io.IOException;
 
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class FileBackedTaskManagerTest {
     @Test
     void savingAnEmptyFile() throws IOException {   // автосохранение пустого файла
         File tempFile = File.createTempFile("testFile", ".csv");
+        tempFile.deleteOnExit();
         FileBackedTaskManager fileBackedTaskManager = new FileBackedTaskManager(tempFile);
 
         fileBackedTaskManager.deleteAllTasks(); // вызываем метод save без значений.
@@ -28,6 +29,7 @@ public class FileBackedTaskManagerTest {
     @Test
     void savingTasksToFile() throws IOException {
         File tempFile = File.createTempFile("testFile", ".csv");
+        tempFile.deleteOnExit();
         FileBackedTaskManager fileBackedTaskManager = new FileBackedTaskManager(tempFile);
 
         Task task1 = new Task("Task 1", "Test");
