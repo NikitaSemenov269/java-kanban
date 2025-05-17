@@ -1,5 +1,7 @@
 package tasks;
 
+import tasks.enums.TaskStatus;
+
 public class Subtask extends Task {
     private int idEpic;
 
@@ -14,7 +16,13 @@ public class Subtask extends Task {
 
     @Override
     public String toString() {
-        return super.toString();
+        return "Subtask{" +
+                "id=" + getId() +
+                ", nameTask='" + getNameTask() + '\'' +
+                ", description='" + getDescription() + '\'' +
+                ", taskStatus=" + '\'' + getTaskStatus() + '\'' +
+                ", idEpic=" + '\'' + getIdEpic() + '\'' +
+                '}';
     }
 }
 

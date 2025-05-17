@@ -1,6 +1,9 @@
 package managers;
 
+import managers.interfaces.HistoryManager;
+import managers.interfaces.TaskManager;
 import tasks.*;
+import tasks.enums.TaskStatus;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -9,19 +12,22 @@ import java.util.Map;
 
 public class InMemoryTaskManager implements TaskManager {
     private int id = 0;
-    private Map<Integer, Task> tasks = new HashMap<>();
-    private Map<Integer, Subtask> subtasks = new HashMap<>();
-    private Map<Integer, Epic> epics = new HashMap<>();
+    protected Map<Integer, Task> tasks = new HashMap<>();
+    protected Map<Integer, Subtask> subtasks = new HashMap<>();
+    protected Map<Integer, Epic> epics = new HashMap<>();
     private HistoryManager historyManager = Managers.getDefaultHistory();
 
     //  ГЕНЕРАЦИЯ ID.
     private int generateId() {
+        if (id < CSVFormat.getGenerateId()) {
+            id = CSVFormat.getGenerateId();
+        }
         return ++id;
     }
 
     //  ОБНОВЛЕНИЕ СТАТУСА КОНКРЕТНОГО EPICа.
     private void updateTaskStatus(Epic epic) {
-        ArrayList<TaskStatus> flags = new ArrayList<>();
+        List<TaskStatus> flags = new ArrayList<>();
         for (int key : epic.getIdSubtasks()) {  //получаем значения id из списка конкретного Tasks.tasks.src.javakanban.Epic
             Subtask subtask = subtasks.get(key);  //получаем значения подзадач по ключам.
             flags.add(subtask.getTaskStatus());
@@ -53,32 +59,37 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public void createSubtasks(Subtask subtask) {
         subtask.setId(generateId());
-        if (epics.containsKey(subtask.getIdEpic())) {     //проверка наличия ключа в epics.
-            subtasks.put(subtask.getId(), subtask);       //добавление подзадачи в hashmap.
-            Epic epic = epics.get(subtask.getIdEpic());  //получаем экземпляр подходящего Tasks.tasks.src.javakanban.Epic.
-            epic.addIdSubtasks(subtask.getId());  //добавление id в список id хранящихся в Tasks.tasks.src.javakanban.Epic.
-            updateTaskStatus(epic);   //передаем требуемый экземпляр Tasks.tasks.src.javakanban.Epic в метод обновления статуса.
+        //проверка наличия ключа в epics.
+        if (epics.containsKey(subtask.getIdEpic())) {
+            //добавление подзадачи в hashmap.
+            subtasks.put(subtask.getId(), subtask);
+            //получаем экземпляр подходящего Tasks.tasks.src.javakanban.Epic.
+            Epic epic = epics.get(subtask.getIdEpic());
+            //добавление id в список id хранящихся в Tasks.tasks.src.javakanban.Epic.
+            epic.addIdSubtasks(subtask.getId());
+            //передаем требуемый экземпляр Tasks.tasks.src.javakanban.Epic в метод обновления статуса.
+            updateTaskStatus(epic);
         }
     }
 
     //  ПОЛУЧЕНИЕ СПИСКА ВСЕХ ЗАДАЧ.
     @Override
-    public ArrayList<Task> getAllTasks() {
+    public List<Task> getAllTasks() {
         return new ArrayList<>(tasks.values());
     }
 
     @Override
-    public ArrayList<Epic> getAllEpics() {
+    public List<Epic> getAllEpics() {
         return new ArrayList<>(epics.values());
     }
 
     @Override
-    public ArrayList<Subtask> getAllSubtasks() {
+    public List<Subtask> getAllSubtasks() {
         return new ArrayList<>(subtasks.values());
     }
 
     @Override
-    public ArrayList<Subtask> getSubtasksOfEpic(Epic epic) {
+    public List<Subtask> getSubtasksOfEpic(Epic epic) {
         ArrayList<Subtask> subtasksEpics = new ArrayList<>();
         if (epics.containsValue(epic)) {
             for (int key : epic.getIdSubtasks()) {

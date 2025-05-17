@@ -1,4 +1,6 @@
 import managers.*;
+import managers.interfaces.HistoryManager;
+import managers.interfaces.TaskManager;
 import org.junit.jupiter.api.Test;
 import tasks.Task;
 

@@ -1,8 +1,8 @@
-import managers.HistoryManager;
+import managers.interfaces.HistoryManager;
 import managers.Managers;
-import managers.TaskManager;
+import managers.interfaces.TaskManager;
+import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
-
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 

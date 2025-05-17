@@ -1,12 +1,14 @@
 package tasks;
 
+import tasks.enums.TaskStatus;
+
 import java.util.Objects;
 
 public class Task {
-    protected int id;
-    protected String nameTask;
-    protected String description;
-    protected TaskStatus taskStatus;
+    private int id;
+    private String nameTask;
+    private String description;
+    private TaskStatus taskStatus;
 
     public Task(String nameTask, String description) {
         this.nameTask = nameTask;
@@ -35,7 +37,7 @@ public class Task {
     }
 
     public String getDescription() {
-        return getDescription();
+        return description;
     }
 
     public int getId() {
@@ -60,11 +62,11 @@ public class Task {
 
     @Override
     public String toString() {
-        return "tasks.src.javakanban.Task{" +
+        return "Task{" +
                 "id=" + id +
                 ", nameTask='" + nameTask + '\'' +
                 ", description='" + description + '\'' +
-                ", taskStatus=" + taskStatus +
+                ", taskStatus=" + '\'' + taskStatus + '\'' +
                 '}';
     }
 }

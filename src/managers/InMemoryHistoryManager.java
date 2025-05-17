@@ -1,5 +1,6 @@
 package managers;
 
+import managers.interfaces.HistoryManager;
 import tasks.Task;
 
 import java.util.ArrayList;
@@ -72,6 +73,11 @@ public class InMemoryHistoryManager implements HistoryManager {
         if (task != null) {
             removeNode(task);
         }
+    }
+
+    @Override
+    public void removeAll() {
+        listOfIDTasksInHistory.clear();
     }
 
     @Override
