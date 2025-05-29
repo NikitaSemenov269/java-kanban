@@ -15,6 +15,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
     private final File autoSave;
     public static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm");
 
+
     public FileBackedTaskManager(File autoSave) {
         this.autoSave = autoSave;
     }
@@ -25,6 +26,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
         try (BufferedReader fileReader = new BufferedReader(new FileReader(file))) {
             while (fileReader.ready()) {
                 String csvLine = fileReader.readLine();
+
                 Task csvFormat = CSVFormat.fromString(csvLine);
 
                 if (Task.class == csvFormat.getClass()) {
@@ -123,6 +125,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
                             throw new ManagerSaveException("***Ошибка сохранения в файл: " + autoSave.getName() + ".");
                         }
                     });
+
         } catch (IOException e) {
             throw new ManagerSaveException("***Ошибка сохранения в файл: " + autoSave.getName() + ".");
         }
@@ -181,6 +184,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
 
     @Override
     public Optional<List<Subtask>> getSubtasksOfEpic(Epic epic) {
+
         return super.getSubtasksOfEpic(epic);
     }
 
@@ -258,11 +262,13 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
         fileBackedTaskManager.createTask(task1);
         fileBackedTaskManager.createTask(task10);
         Task task2 = new Task("Two", "task", "12.03.2025 11:00", 35);
+
         fileBackedTaskManager.createTask(task2);
         Epic epic1 = new Epic("One", "epic");
         fileBackedTaskManager.createEpic(epic1);
         Epic epic2 = new Epic("Two", "epic");
         fileBackedTaskManager.createEpic(epic2);
+        
         Subtask subtask1 = new Subtask("One", "subtask", TaskStatus.DONE, "12.03.2025 12:00", 35, epic2.getId());
         fileBackedTaskManager.createSubtasks(subtask1);
         Subtask subtask2 = new Subtask("Two", "subtask", TaskStatus.NEW, "12.03.2025 13:00", 35, epic1.getId());
@@ -302,3 +308,4 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
         }
     }
 }
+

@@ -1,6 +1,7 @@
 import managers.*;
 import managers.interfaces.HistoryManager;
 import managers.interfaces.TaskManager;
+
 import org.junit.jupiter.api.Test;
 import tasks.Epic;
 import tasks.Subtask;
@@ -44,7 +45,7 @@ abstract class TaskManagerTest<T extends TaskManager> {
         Subtask sub2 = new Subtask("Sub2", "Desc2", TaskStatus.NEW, "25.10.2025 12:25", 40, epic.getId());
         taskManager.createSubtasks(sub1);
         taskManager.createSubtasks(sub2);
-
+      
         assertEquals(TaskStatus.NEW, epic.getTaskStatus());
     }
 
@@ -80,6 +81,7 @@ abstract class TaskManagerTest<T extends TaskManager> {
         taskManager.createSubtasks(sub1);
 
         assertEquals(TaskStatus.IN_PROGRESS, epic.getTaskStatus());
+
     }
 
     @Test
