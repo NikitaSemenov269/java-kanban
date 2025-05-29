@@ -4,7 +4,10 @@ import tasks.Epic;
 import tasks.Subtask;
 import tasks.Task;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 public interface TaskManager {
 
@@ -26,13 +29,15 @@ public interface TaskManager {
 
     void deleteAllSubtasks();
 
-    List<Subtask> getSubtasksOfEpic(Epic epic);
+    Optional<List<Subtask>> getSubtasksOfEpic(Epic epic);
 
     Task getTask(int key);
 
     Epic getEpic(int key);
 
     Subtask getSubtask(int key);
+
+    List<Task> getPrioritizedTasks();
 
     void updateTask(Task task);
 

@@ -1,6 +1,5 @@
 import managers.*;
 import managers.interfaces.TaskManager;
-import org.junit.jupiter.api.Order;
 import tasks.*;
 import org.junit.jupiter.api.Test;
 import tasks.enums.TaskStatus;
@@ -12,7 +11,7 @@ public class InMemoryTaskManagerTest {
     @Test
     void testIdConflicts() {
         TaskManager taskManager = Managers.getDefault();
-        Task task = new Task("Task1", "Desc1");
+        Task task = new Task("Task1", "Desc1", "25.10.2025 15:00", 40);
         taskManager.createTask(task);
         assertEquals(task, taskManager.getTask(task.getId()), "Задачи не совпадают.");
     }
@@ -20,8 +19,8 @@ public class InMemoryTaskManagerTest {
     @Test
     void testUniqueIdGeneration() {
         TaskManager taskManager = Managers.getDefault();
-        Task task1 = new Task("Task1", "Desc1");
-        Task task2 = new Task("Task2", "Desc2");
+        Task task1 = new Task("Task1", "Desc1", "25.10.2025 12:10", 40);
+        Task task2 = new Task("Task2", "Desc2", "25.10.2024 11:45", 40);
         taskManager.createTask(task1); // id = 1
         taskManager.createTask(task2); // id = 2
         assertEquals(task1.getId() + 1, task2.getId());
@@ -31,12 +30,13 @@ public class InMemoryTaskManagerTest {
     @Test
     void testMoreTips() {
         TaskManager taskManager = Managers.getDefault();
-        Task task = new Task("Test addNewTask", "Test addNewTask description");
+        Task task = new Task("Test addNewTask", "Test addNewTask description",
+                "25.10.2025 13:34", 40);
         taskManager.createTask(task);
         Epic epic = new Epic("Test addNewTask", "Test addNewTask description");
         taskManager.createEpic(epic);
         Subtask subtask = new Subtask("Test addNewTask", "Test addNewTask description",
-                TaskStatus.NEW, epic.getId());
+                TaskStatus.NEW, "25.10.2025 14:22", 35, epic.getId());
         taskManager.createSubtasks(subtask);
 
         assertEquals(taskManager.getTask(task.getId()), task, "Задачи не совпадают_1.");
@@ -49,10 +49,11 @@ public class InMemoryTaskManagerTest {
         TaskManager taskManager = Managers.getDefault();
         Epic epic = new Epic("Epic", "Desc");
         taskManager.createEpic(epic); // Создается эпик и добавляется в менеджер
-        Subtask sub = new Subtask("Sub", "Desc", TaskStatus.NEW, epic.getId());
+        Subtask sub = new Subtask("Sub", "Desc", TaskStatus.NEW,
+                "25.10.2025 16:10", 25, epic.getId());
         taskManager.createSubtasks(sub); // Создается подзадача и добавляется в менеджер
-        epic.addIdSubtasks(sub.getId());
-        epic.addIdSubtasks(sub.getId());
+        epic.isAddIdSubtasks(sub.getId());
+        epic.isAddIdSubtasks(sub.getId());
         assertEquals(1, epic.getIdSubtasks().size(), "Количество подзадач не равно 1.");
     }
 
@@ -62,15 +63,18 @@ public class InMemoryTaskManagerTest {
         Epic epic = new Epic("Epic", "Desc");
         taskManager.createEpic(epic);
 
-        Subtask sub1 = new Subtask("Sub1", "Desc1", TaskStatus.NEW, epic.getId());
+        Subtask sub1 = new Subtask("Sub1", "Desc1", TaskStatus.NEW,
+                "25.10.2025 11:25", 40, epic.getId());
         taskManager.createSubtasks(sub1);
-        epic.addIdSubtasks(sub1.getId());
-        Subtask sub2 = new Subtask("Sub2", "Desc2", TaskStatus.NEW, epic.getId());
+        epic.isAddIdSubtasks(sub1.getId());
+        Subtask sub2 = new Subtask("Sub2", "Desc2", TaskStatus.NEW,
+                "28.10.2025 13:55", 40, epic.getId());
         taskManager.createSubtasks(sub2);
-        epic.addIdSubtasks(sub2.getId());
-        Subtask sub3 = new Subtask("Sub3", "Desc3", TaskStatus.NEW, epic.getId());
+        epic.isAddIdSubtasks(sub2.getId());
+        Subtask sub3 = new Subtask("Sub3", "Desc3", TaskStatus.NEW,
+                "27.10.2025 11:25", 40, epic.getId());
         taskManager.createSubtasks(sub3);
-        epic.addIdSubtasks(sub3.getId());
+        epic.isAddIdSubtasks(sub3.getId());
 
         assertEquals(3, epic.getIdSubtasks().size(), "Количество id подзадач не равно 3.");
         assertEquals(epic.getId(), sub1.getIdEpic(), "id эпиков не совпадает_1");

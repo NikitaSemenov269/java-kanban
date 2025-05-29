@@ -6,6 +6,8 @@ import tasks.Subtask;
 import tasks.Task;
 import tasks.enums.TaskStatus;
 
+import java.util.Arrays;
+
 public class CSVFormat {
     private static int maxId = 0;
 
@@ -32,25 +34,33 @@ public class CSVFormat {
         }
         switch (type) {
             case TASK:
-                Task task = new Task(value[2].trim(), value[4].trim());
+                Task task = new Task(value[2].trim(), value[4].trim(), value[7], Integer.parseInt(value[8]));
                 task.setId(Integer.parseInt(value[0].trim()));
                 task.setTaskStatus(TaskStatus.valueOf(value[3].trim()));
                 return task;
+
             case EPIC:
                 Epic epic = new Epic(value[2].trim(), value[4].trim());
                 epic.setId(Integer.parseInt(value[0].trim()));
                 epic.setTaskStatus(TaskStatus.valueOf(value[3].trim()));
-                if (!(value[6].equals("-1"))) {
-                    String[] temporaryId = value[6].split("and");
-                    for (String id : temporaryId) {
-                        epic.addIdSubtasks(Integer.parseInt(id.trim()));
-                    }
+                String subtasksId = value[6];
+                if (!subtasksId.isBlank()) {
+                    Arrays.stream(subtasksId.split("and"))
+                            .map(String::trim)
+                            .forEach(subtaskId -> {
+                                try {
+                                    epic.isAddIdSubtasks(Integer.parseInt(subtaskId));
+                                } catch (NumberFormatException e) {
+                                    System.out.println("Ошибка при парсинге ID подзадачи: " + subtaskId);
+                                }
+                            });
                 }
                 return epic;
+
             case SUBTASK:
                 if (!value[5].isEmpty()) {
-                    Subtask subtask = new Subtask(value[2].trim(), value[4].trim(),
-                            TaskStatus.valueOf(value[3]), Integer.parseInt(value[5].trim()));
+                    Subtask subtask = new Subtask(value[2].trim(), value[4].trim(), TaskStatus.valueOf(value[3]),
+                            value[7], Integer.parseInt(value[8].trim()), Integer.parseInt(value[5].trim()));
                     subtask.setId(Integer.parseInt(value[0].trim()));
                     return subtask;
                 }

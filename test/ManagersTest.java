@@ -1,25 +1,23 @@
-import managers.interfaces.HistoryManager;
 import managers.Managers;
+import managers.interfaces.HistoryManager;
 import managers.interfaces.TaskManager;
-import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
+
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class ManagersTest {
-
+class ManagersTest {
     @Test
     void getDefaultHistoryReturnsInitializedHistory() {
-        HistoryManager historyManager = Managers.getDefaultHistory(); // Возвращает историю, которая инициализирована
-        assertNotNull(historyManager); // Метод не возвращает null
-        assertTrue(historyManager.getHistory().isEmpty()); // История пустая, только что созданная
+        HistoryManager historyManager = Managers.getDefaultHistory();
+        assertNotNull(historyManager);
+        assertTrue(historyManager.getHistory().isEmpty());
     }
 
     @Test
     void getDefaultTaskManagerIsInitialized() {
-        TaskManager taskManager = Managers.getDefault();// Возвращает менеджер задач, который инициализирован
-        assertNotNull(taskManager); // Метод не возвращает null
-        assertTrue(taskManager.getAllTasks().isEmpty()); // Менеджер задач пустой, только что созданный
+        TaskManager taskManager = Managers.getDefault();
+        assertNotNull(taskManager);
+        assertTrue(taskManager.getAllTasks().isEmpty());
     }
 }
-
