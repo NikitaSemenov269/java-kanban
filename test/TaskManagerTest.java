@@ -1,86 +1,94 @@
-import managers.HistoryManager;
-import managers.Managers;
-import managers.TaskManager;
+import managers.*;
+import managers.interfaces.HistoryManager;
+import managers.interfaces.TaskManager;
 import org.junit.jupiter.api.Test;
 import tasks.Epic;
 import tasks.Subtask;
 import tasks.Task;
-import tasks.TaskStatus;
-
-import java.util.HashMap;
-import java.util.List;
+import tasks.enums.TaskStatus;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class TaskManagerTest {
-    //  убедитесь, что утилитарный класс всегда возвращает проинициализированные и готовые к работе экземпляры менеджеров;
-    TaskManager taskManager = Managers.getDefault();
-    HistoryManager historyManager = Managers.getDefaultHistory();
+abstract class TaskManagerTest<T extends TaskManager> {
+    protected TaskManager taskManager = Managers.getDefault();
 
     @Test
-    void addNewTask() {   //тест на создание задачи и проверку совпадения при одинаковом id
-        Task task = new Task("Test addNewTask", "Test addNewTask description");
+    void addNewTask() {
+        Task task = new Task("Test addNewTask", "Test addNewTask description", "12.03.2025 11:00", 35);
         taskManager.createTask(task);
         final Task savedTask = taskManager.getTask(task.getId());
         assertNotNull(savedTask, "Задача не найдена.");
         assertEquals(task, savedTask, "Задачи не совпадают.");
-
-        final List<Task> tasks = taskManager.getAllTasks();
-        assertNotNull(tasks, "Задачи не возвращаются.");
-        assertEquals(1, tasks.size(), "Неверное количество задач.");
-        assertEquals(task, tasks.get(0), "Задачи не совпадают.");
     }
 
-    //      создайте тест, в котором проверяется неизменность задачи (по всем полям) при добавлении задачи в менеджер;
-    @Test
-    void add() {
-        Task task = new Task("Test addNewTask", "Test addNewTask description");
-        taskManager.createTask(task);
-        final Task savedTask = taskManager.getTask(task.getId());
-        historyManager.add(task);
-        final List<Task> history = historyManager.getHistory();
-        assertNotNull(history, "После добавления задачи, история не должна быть пустой.");
-        assertEquals(1, history.size(), "После добавления задачи, история не должна быть пустой.");
-        assertEquals(history.get(0), savedTask, "Задачи не совпадают.");
-//      убедитесь, что задачи, добавляемые в HistoryManager, сохраняют предыдущую версию задачи и её данных;
-        task = new Task("1_Test addNewTask_1", "1_Test addNewTask description_1");
-        taskManager.updateTask(task);
-        assertNotEquals(task, history.get(0), "Ошибка: Задачи совпали");
-
-    }
-
-    //    проверьте, что InMemoryTaskManager действительно добавляет задачи разного типа и может найти их по id;
-//    проверьте, что наследники класса Task равны друг другу, если равен их id;
     @Test
     void testMoreTips() {
-        Task task = new Task("Test addNewTask", "Test addNewTask description");
-        Epic epic = new Epic("Test addNewTask", "Test addNewTask description");
-        Subtask subtask = new Subtask("Test addNewTask", "Test addNewTask description",
-                TaskStatus.NEW, epic.getId());
-
+        Task task = new Task("Test addNewTask", "Test addNewTask description", "25.10.2025 13:34", 40);
         taskManager.createTask(task);
+        Epic epic = new Epic("Test addNewTask", "Test addNewTask description");
         taskManager.createEpic(epic);
+        Subtask subtask = new Subtask("Test addNewTask", "Test addNewTask description",
+                TaskStatus.NEW, "25.10.2025 14:22", 35, epic.getId());
         taskManager.createSubtasks(subtask);
 
-        historyManager.add(task);
-        historyManager.add(epic);
-        historyManager.add(subtask);
-        final List<Task> history = historyManager.getHistory();
-
-        assertEquals(history.get(2), task, "Задачи не совпадают.");
-        assertEquals(history.get(1), epic, "Задачи не совпадают.");
-        assertEquals(history.get(0), subtask, "Задачи не совпадают.");
+        assertEquals(taskManager.getTask(task.getId()), task);
+        assertEquals(taskManager.getEpic(epic.getId()), epic);
+        assertEquals(taskManager.getSubtask(subtask.getId()), subtask);
     }
 
-    //  проверьте, что задачи с заданным id и сгенерированным id не конфликтуют внутри менеджера;
     @Test
-    void addTasks() {
-        Task taskFerst = new Task("Test addNewTask", "Test addNewTask description");
-        taskManager.createTask(taskFerst);
-        Task taskSecond = new Task("Test addNewTask", "Test addNewTask description");
-        taskSecond.setId(5);
-        assertNotEquals(taskSecond, taskManager.getTask(taskFerst.getId()));
+    void testEpicStatusAllNew() {
+        Epic epic = new Epic("Epic", "Desc");
+        taskManager.createEpic(epic);
+        Subtask sub1 = new Subtask("Sub1", "Desc1", TaskStatus.NEW, "25.10.2025 11:25", 40, epic.getId());
+        Subtask sub2 = new Subtask("Sub2", "Desc2", TaskStatus.NEW, "25.10.2025 12:25", 40, epic.getId());
+        taskManager.createSubtasks(sub1);
+        taskManager.createSubtasks(sub2);
+
+        assertEquals(TaskStatus.NEW, epic.getTaskStatus());
+    }
+
+    @Test
+    void testEpicStatusAllDone() {
+        Epic epic = new Epic("Epic", "Desc");
+        taskManager.createEpic(epic);
+        Subtask sub1 = new Subtask("Sub1", "Desc1", TaskStatus.DONE, "25.10.2025 11:25", 40, epic.getId());
+        Subtask sub2 = new Subtask("Sub2", "Desc2", TaskStatus.DONE, "25.10.2025 12:25", 40, epic.getId());
+        taskManager.createSubtasks(sub1);
+        taskManager.createSubtasks(sub2);
+
+        assertEquals(TaskStatus.DONE, epic.getTaskStatus());
+    }
+
+    @Test
+    void testEpicStatusMixed() {
+        Epic epic = new Epic("Epic", "Desc");
+        taskManager.createEpic(epic);
+        Subtask sub1 = new Subtask("Sub1", "Desc1", TaskStatus.NEW, "25.10.2025 11:25", 40, epic.getId());
+        Subtask sub2 = new Subtask("Sub2", "Desc2", TaskStatus.DONE, "25.10.2025 12:25", 40, epic.getId());
+        taskManager.createSubtasks(sub1);
+        taskManager.createSubtasks(sub2);
+
+        assertEquals(TaskStatus.IN_PROGRESS, epic.getTaskStatus());
+    }
+
+    @Test
+    void testEpicStatusInProgress() {
+        Epic epic = new Epic("Epic", "Desc");
+        taskManager.createEpic(epic);
+        Subtask sub1 = new Subtask("Sub1", "Desc1", TaskStatus.IN_PROGRESS, "25.10.2025 11:25", 40, epic.getId());
+        taskManager.createSubtasks(sub1);
+
+        assertEquals(TaskStatus.IN_PROGRESS, epic.getTaskStatus());
+    }
+
+    @Test
+    void testTimeOverlap() {
+        Task task1 = new Task("Task1", "Desc1", "25.10.2025 10:00", 60);
+        Task task2 = new Task("Task2", "Desc2", "25.10.2025 10:30", 30);
+        taskManager.createTask(task1);
+        taskManager.createTask(task2);
+
+        assertEquals(1, taskManager.getPrioritizedTasks().size());
     }
 }
-
-

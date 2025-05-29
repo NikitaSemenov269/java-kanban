@@ -1,18 +1,24 @@
 package tasks;
 
-import java.util.ArrayList;
+import java.util.*;
 
 public class Epic extends Task {
-    private ArrayList<Integer> idSubtasks = new ArrayList<>();
+    private List<Integer> idSubtasks = new ArrayList<>();
 
     public Epic(String nameEpic, String description) {
-        super(nameEpic, description);
+        super(nameEpic, description, "01.01.0001 00:00", 0);
     }
 
-    public void addIdSubtasks(int id) {
+    public List<Integer> getIdSubtasks() {
+        return idSubtasks;
+    }
+
+    public boolean isAddIdSubtasks(int id) {
         if (!idSubtasks.contains(id)) {
             this.idSubtasks.add(id);
+            return true;
         }
+        return false;
     }
 
     public void deleteIdSubtasks(int id) {
@@ -21,12 +27,17 @@ public class Epic extends Task {
         }
     }
 
-    public ArrayList<Integer> getIdSubtasks() {
-        return idSubtasks;
-    }
-
     @Override
     public String toString() {
-        return super.toString();
+        return "Epic{" +
+                "id=" + getId() +
+                ", nameTask='" + getNameTask() + '\'' +
+                ", description='" + getDescription() + '\'' +
+                ", taskStatus=" + getTaskStatus() +
+                ", idSubtasks=" + getIdSubtasks() +
+                ", startTime=" + getStartTimeStr() +
+                ", duration=" + getDurationInt() +
+                ", endTime=" + getEndTimeStr() +
+                '}';
     }
 }
