@@ -1,16 +1,22 @@
 package tasks;
 
+import java.time.LocalDateTime;
 import java.util.*;
 
 public class Epic extends Task {
     private List<Integer> idSubtasks = new ArrayList<>();
+    private LocalDateTime endTime;
 
     public Epic(String nameEpic, String description) {
-        super(nameEpic, description, "01.01.0001 00:00", 0);
+        super(nameEpic, description);
     }
 
     public List<Integer> getIdSubtasks() {
         return idSubtasks;
+    }
+
+    public void setEndTime(LocalDateTime endTime) {
+        this.endTime = endTime;
     }
 
     public boolean isAddIdSubtasks(int id) {

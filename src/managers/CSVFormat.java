@@ -34,9 +34,11 @@ public class CSVFormat {
         }
         switch (type) {
             case TASK:
-                Task task = new Task(value[2].trim(), value[4].trim(), value[7], Integer.parseInt(value[8]));
+                Task task = new Task(value[2].trim(), value[4].trim());
                 task.setId(Integer.parseInt(value[0].trim()));
                 task.setTaskStatus(TaskStatus.valueOf(value[3].trim()));
+                task.setDuration(Integer.parseInt(value[8]));
+                task.setStartTime(value[7]);
                 return task;
 
             case EPIC:
@@ -59,9 +61,12 @@ public class CSVFormat {
 
             case SUBTASK:
                 if (!value[5].isEmpty()) {
-                    Subtask subtask = new Subtask(value[2].trim(), value[4].trim(), TaskStatus.valueOf(value[3]),
-                            value[7], Integer.parseInt(value[8].trim()), Integer.parseInt(value[5].trim()));
+                    Subtask subtask = new Subtask(value[2].trim(), value[4].trim(), TaskStatus.valueOf(value[3])
+                            , Integer.parseInt(value[5].trim()));
                     subtask.setId(Integer.parseInt(value[0].trim()));
+                    subtask.setStartTime(value[7]);
+                    subtask.setDuration(Integer.parseInt(value[8].trim()));
+
                     return subtask;
                 }
                 throw new IllegalArgumentException("***idEpic отсутствует***");

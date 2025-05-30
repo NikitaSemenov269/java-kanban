@@ -27,9 +27,9 @@ class FileBackedTaskManagerTest extends TaskManagerTest<FileBackedTaskManager> {
 
     @Test
     void savingTasksToFile() throws IOException {
-        Task task1 = new Task("Task 1", "Test", "25.10.2025 15:00", 40);
+        Task task1 = new Task("Task 1", "Test");
         taskManager.createTask(task1);
-        Task task2 = new Task("Task 1", "Test", "26.10.2025 15:40", 50);
+        Task task2 = new Task("Task 1", "Test");
         taskManager.createTask(task2);
 
         TaskManager loadedManager = FileBackedTaskManager.loadFromFile(tempFile);

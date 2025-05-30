@@ -15,15 +15,12 @@ public class Task {
     private TaskStatus taskStatus; // 3
     private LocalDateTime startTime; // 4
     private Duration duration;//5
-    private LocalDateTime endTime;
 
-    public Task(String nameTask, String description, String startTime, int duration) {
+    public Task(String nameTask, String description) {
         this.nameTask = nameTask;
         this.description = description;
-        if (startTime != null && !startTime.isBlank()) {
-            this.startTime = LocalDateTime.parse(startTime, formatter);
-        }
-        this.duration = Duration.ofMinutes(duration);
+        this.startTime = LocalDateTime.now();
+        this.duration = Duration.ofMinutes(5);
         this.taskStatus = TaskStatus.NEW;
     }
 
@@ -51,10 +48,6 @@ public class Task {
         this.startTime = startTime;
     }
 
-    public void setEndTime(LocalDateTime endTime) {
-        this.endTime = endTime;
-    }
-
     public void setDuration(int duration) {
         this.duration = Duration.ofMinutes(duration);
     }
@@ -80,7 +73,7 @@ public class Task {
     }
 
     public String getStartTimeStr() {
-        return LocalDateTime.now().format(formatter);
+        return startTime.format(formatter);
     }
 
     public Duration getDuration() {
@@ -103,7 +96,7 @@ public class Task {
     }
 
     public String getEndTimeStr() {
-        return LocalDateTime.now().format(formatter);
+        return startTime.plus(duration).format(formatter);
     }
 
     @Override

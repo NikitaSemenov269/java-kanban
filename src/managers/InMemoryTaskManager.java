@@ -16,7 +16,7 @@ public class InMemoryTaskManager implements TaskManager {
     protected Map<Integer, Subtask> subtasks = new HashMap<>();
     protected Map<Integer, Epic> epics = new HashMap<>();
     private HistoryManager historyManager = Managers.getDefaultHistory();
-    Comparator<Task> startTime = Comparator.comparing(Task::getStartTime);
+    private Comparator<Task> startTime = Comparator.comparing(Task::getStartTime);
     protected TreeSet<Task> prioritizedTasks = new TreeSet<>(startTime);
 
     //  ГЕНЕРАЦИЯ ID.
@@ -149,11 +149,8 @@ public class InMemoryTaskManager implements TaskManager {
             subtask.setId(newId);
             if (epic.isAddIdSubtasks(subtask.getId())) {
                 subtasks.put(subtask.getId(), subtask);
-                if (subtask.getStartTime() != null
-                        && subtask.getEndTime() != null
+                if (subtask.getStartTime() != null && subtask.getEndTime() != null
                         && subtask.getStartTime().isBefore(subtask.getEndTime())) {
-                    prioritizedTasks.add(subtask);
-                    updateEpicTime(epic);
                     if (!prioritizedTasks.isEmpty()) {
                         boolean hasOverlap = prioritizedTasks.stream()
                                 .anyMatch(subtasks1 -> isTimeOverlap(subtasks1, subtask));
@@ -164,9 +161,10 @@ public class InMemoryTaskManager implements TaskManager {
                         prioritizedTasks.add(subtask);
                     }
                     prioritizedTasks.remove(epic);
-                    updateEpicStatus(epic);
+                    updateEpicTime(epic);
                     prioritizedTasks.add(epic);
                 }
+                updateEpicStatus(epic);
             }
         }
     }
@@ -189,13 +187,10 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
-    public Optional<List<Subtask>> getSubtasksOfEpic(Epic epic) {
-        if (!epics.containsValue(epic)) {
-            return Optional.empty();
-        }
-        return Optional.of(epic.getIdSubtasks().stream()
+    public List<Subtask> getSubtasksOfEpic(Epic epic) {
+        return epic.getIdSubtasks().stream()
                 .map(subtasks::get)
-                .collect(Collectors.toList()));
+                .collect(Collectors.toList());
     }
 
     //  УДАЛЕНИЕ ВСЕХ ЗАДАЧ.

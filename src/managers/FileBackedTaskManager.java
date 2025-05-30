@@ -180,7 +180,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
     }
 
     @Override
-    public Optional<List<Subtask>> getSubtasksOfEpic(Epic epic) {
+    public List<Subtask> getSubtasksOfEpic(Epic epic) {
         return super.getSubtasksOfEpic(epic);
     }
 
@@ -253,21 +253,23 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
     public static void main(String[] args) {
         File file = new File("autoSave.csv");
         FileBackedTaskManager fileBackedTaskManager = new FileBackedTaskManager(file);
-        Task task1 = new Task("One", "task", "12.03.2025 10:00", 35);
-        Task task10 = new Task("One", "task", "", 35);
+        Task task1 = new Task("One", "task");
+        Task task10 = new Task("One", "task");
         fileBackedTaskManager.createTask(task1);
+        task1.setStartTime("12.05.2024 10:00");
         fileBackedTaskManager.createTask(task10);
-        Task task2 = new Task("Two", "task", "12.03.2025 11:00", 35);
+        task10.setStartTime("17.03.2024 10:00");
+        Task task2 = new Task("Two", "task");
         fileBackedTaskManager.createTask(task2);
         Epic epic1 = new Epic("One", "epic");
         fileBackedTaskManager.createEpic(epic1);
         Epic epic2 = new Epic("Two", "epic");
         fileBackedTaskManager.createEpic(epic2);
-        Subtask subtask1 = new Subtask("One", "subtask", TaskStatus.DONE, "12.03.2025 12:00", 35, epic2.getId());
+        Subtask subtask1 = new Subtask("One", "subtask", TaskStatus.DONE, epic2.getId());
         fileBackedTaskManager.createSubtasks(subtask1);
-        Subtask subtask2 = new Subtask("Two", "subtask", TaskStatus.NEW, "12.03.2025 13:00", 35, epic1.getId());
+        Subtask subtask2 = new Subtask("Two", "subtask", TaskStatus.NEW, epic1.getId());
         fileBackedTaskManager.createSubtasks(subtask2);
-        Subtask subtask3 = new Subtask("Two", "subtask", TaskStatus.DONE, "12.03.2025 13:00", 35, epic1.getId());
+        Subtask subtask3 = new Subtask("Two", "subtask", TaskStatus.DONE, epic1.getId());
         fileBackedTaskManager.createSubtasks(subtask3);
         Epic epic3 = new Epic("Three ", "epic");
         fileBackedTaskManager.createEpic(epic3);

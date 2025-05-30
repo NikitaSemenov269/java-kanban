@@ -5,13 +5,8 @@ import tasks.enums.TaskStatus;
 public class Subtask extends Task {
     private int idEpic;
 
-    public Subtask(String nameSubtask,
-                   String description,
-                   TaskStatus taskStatus,
-                   String startTime,
-                   int duration,
-                   int idEpic) {
-        super(nameSubtask, description, startTime, duration);
+    public Subtask(String nameSubtask, String description, TaskStatus taskStatus, int idEpic) {
+        super(nameSubtask, description);
         this.idEpic = idEpic;
         setTaskStatus(taskStatus);
     }

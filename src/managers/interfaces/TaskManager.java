@@ -27,7 +27,7 @@ public interface TaskManager {
 
     void deleteAllSubtasks();
 
-    Optional<List<Subtask>> getSubtasksOfEpic(Epic epic);
+    List<Subtask> getSubtasksOfEpic(Epic epic);
 
     Task getTask(int key);
 

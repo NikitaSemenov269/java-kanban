@@ -13,7 +13,7 @@ class InMemoryHistoryManagerTest {
 
     @Test
     void addTaskInHistoryList() {
-        Task task = new Task("Task", "Desc", "12.03.2025 11:00", 35);
+        Task task = new Task("Task", "Desc");
         taskManager.createTask(task);
         historyManager.add(task);
         assertEquals(1, historyManager.getHistory().size());
@@ -21,8 +21,8 @@ class InMemoryHistoryManagerTest {
 
     @Test
     void removeTasksFromTheHistoryList() {
-        Task task1 = new Task("Task1", "Desc1", "10.03.2025 11:00", 35);
-        Task task2 = new Task("Task2", "Desc2", "19.03.2025 11:00", 35);
+        Task task1 = new Task("Task1", "Desc1");
+        Task task2 = new Task("Task2", "Desc2");
         taskManager.createTask(task1);
         taskManager.createTask(task2);
 
