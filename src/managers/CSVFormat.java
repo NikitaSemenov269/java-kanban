@@ -61,8 +61,8 @@ public class CSVFormat {
 
             case SUBTASK:
                 if (!value[5].isEmpty()) {
-                    Subtask subtask = new Subtask(value[2].trim(), value[4].trim(), TaskStatus.valueOf(value[3])
-                            , Integer.parseInt(value[5].trim()));
+                    Subtask subtask = new Subtask(value[2].trim(), value[4].trim(), TaskStatus.valueOf(value[3]),
+                            Integer.parseInt(value[5].trim()));
                     subtask.setId(Integer.parseInt(value[0].trim()));
                     subtask.setStartTime(value[7]);
                     subtask.setDuration(Integer.parseInt(value[8].trim()));
