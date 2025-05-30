@@ -5,7 +5,6 @@ import tasks.Subtask;
 import tasks.Task;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface TaskManager {
 
