@@ -5,13 +5,14 @@ import tasks.enums.TaskStatus;
 public class Subtask extends Task {
     private int idEpic;
 
-    public Subtask(String nameTask, String description, TaskStatus taskStatus, int idEpic) {
-        super(nameTask, description);
+    public Subtask(String nameSubtask, String description, TaskStatus taskStatus, int idEpic) {
+        super(nameSubtask, description);
         this.idEpic = idEpic;
+        setTaskStatus(taskStatus);
     }
 
     public int getIdEpic() {
-        return idEpic;
+        return this.idEpic;
     }
 
     @Override
@@ -20,12 +21,10 @@ public class Subtask extends Task {
                 "id=" + getId() +
                 ", nameTask='" + getNameTask() + '\'' +
                 ", description='" + getDescription() + '\'' +
-                ", taskStatus=" + '\'' + getTaskStatus() + '\'' +
-                ", idEpic=" + '\'' + getIdEpic() + '\'' +
+                ", taskStatus=" + getTaskStatus() +
+                ", startTime=" + getStartTimeStr() +
+                ", duration=" + getDurationInt() +
+                ", endTime=" + getEndTimeStr() +
                 '}';
     }
 }
-
-
-
-

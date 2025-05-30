@@ -2,17 +2,25 @@ package tasks;
 
 import tasks.enums.TaskStatus;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.Objects;
 
+import static managers.FileBackedTaskManager.formatter;
+
 public class Task {
-    private int id;
-    private String nameTask;
-    private String description;
-    private TaskStatus taskStatus;
+    private int id; // 0
+    private String nameTask;  // 1
+    private String description; // 2
+    private TaskStatus taskStatus; // 3
+    private LocalDateTime startTime; // 4
+    private Duration duration;//5
 
     public Task(String nameTask, String description) {
         this.nameTask = nameTask;
         this.description = description;
+        this.startTime = LocalDateTime.now();
+        this.duration = Duration.ofMinutes(5);
         this.taskStatus = TaskStatus.NEW;
     }
 
@@ -32,6 +40,18 @@ public class Task {
         this.taskStatus = taskStatus;
     }
 
+    public void setStartTime(String startTime) {
+        this.startTime = LocalDateTime.parse(startTime, formatter);
+    }
+
+    public void setStartTimeEpic(LocalDateTime startTime) {
+        this.startTime = startTime;
+    }
+
+    public void setDuration(int duration) {
+        this.duration = Duration.ofMinutes(duration);
+    }
+
     public String getNameTask() {
         return nameTask;
     }
@@ -46,6 +66,37 @@ public class Task {
 
     public TaskStatus getTaskStatus() {
         return taskStatus;
+    }
+
+    public LocalDateTime getStartTime() {
+        return startTime;
+    }
+
+    public String getStartTimeStr() {
+        return startTime.format(formatter);
+    }
+
+    public Duration getDuration() {
+        return duration;
+    }
+
+    public int getDurationInt() {
+        return (int) duration.toMinutes();
+    }
+
+    public int getDurationMinutes() {
+        return (int) this.duration.toMinutes();
+    }
+
+    public LocalDateTime getEndTime() {
+        if (duration.toMinutes() < 0) {
+            throw new IllegalArgumentException("***Отрицательное значение duration: " + duration);
+        }
+        return startTime.plus(duration);
+    }
+
+    public String getEndTimeStr() {
+        return startTime.plus(duration).format(formatter);
     }
 
     @Override
@@ -66,7 +117,10 @@ public class Task {
                 "id=" + id +
                 ", nameTask='" + nameTask + '\'' +
                 ", description='" + description + '\'' +
-                ", taskStatus=" + '\'' + taskStatus + '\'' +
+                ", taskStatus=" + taskStatus +
+                ", startTime=" + getStartTimeStr() +
+                ", duration=" + getDurationInt() +
+                ", endTime=" + getEndTimeStr() +
                 '}';
     }
 }

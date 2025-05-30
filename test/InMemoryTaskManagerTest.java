@@ -1,6 +1,5 @@
 import managers.*;
 import managers.interfaces.TaskManager;
-import org.junit.jupiter.api.Order;
 import tasks.*;
 import org.junit.jupiter.api.Test;
 import tasks.enums.TaskStatus;
@@ -51,8 +50,8 @@ public class InMemoryTaskManagerTest {
         taskManager.createEpic(epic); // Создается эпик и добавляется в менеджер
         Subtask sub = new Subtask("Sub", "Desc", TaskStatus.NEW, epic.getId());
         taskManager.createSubtasks(sub); // Создается подзадача и добавляется в менеджер
-        epic.addIdSubtasks(sub.getId());
-        epic.addIdSubtasks(sub.getId());
+        epic.isAddIdSubtasks(sub.getId());
+        epic.isAddIdSubtasks(sub.getId());
         assertEquals(1, epic.getIdSubtasks().size(), "Количество подзадач не равно 1.");
     }
 
@@ -64,13 +63,13 @@ public class InMemoryTaskManagerTest {
 
         Subtask sub1 = new Subtask("Sub1", "Desc1", TaskStatus.NEW, epic.getId());
         taskManager.createSubtasks(sub1);
-        epic.addIdSubtasks(sub1.getId());
+        epic.isAddIdSubtasks(sub1.getId());
         Subtask sub2 = new Subtask("Sub2", "Desc2", TaskStatus.NEW, epic.getId());
         taskManager.createSubtasks(sub2);
-        epic.addIdSubtasks(sub2.getId());
+        epic.isAddIdSubtasks(sub2.getId());
         Subtask sub3 = new Subtask("Sub3", "Desc3", TaskStatus.NEW, epic.getId());
         taskManager.createSubtasks(sub3);
-        epic.addIdSubtasks(sub3.getId());
+        epic.isAddIdSubtasks(sub3.getId());
 
         assertEquals(3, epic.getIdSubtasks().size(), "Количество id подзадач не равно 3.");
         assertEquals(epic.getId(), sub1.getIdEpic(), "id эпиков не совпадает_1");
