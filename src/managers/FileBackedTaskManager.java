@@ -250,57 +250,57 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
         return "FileBackedTaskManager{" + "tasks=" + tasks + ", subtasks=" + subtasks + ", epics=" + epics + '}';
     }
 
-    public static void main(String[] args) {
-        File file = new File("autoSave.csv");
-        FileBackedTaskManager fileBackedTaskManager = new FileBackedTaskManager(file);
-        Task task1 = new Task("One", "task");
-        Task task10 = new Task("One", "task");
-        fileBackedTaskManager.createTask(task1);
-        task1.setStartTime("12.05.2024 10:00");
-        fileBackedTaskManager.createTask(task10);
-        task10.setStartTime("17.03.2024 10:00");
-        Task task2 = new Task("Two", "task");
-        fileBackedTaskManager.createTask(task2);
-        Epic epic1 = new Epic("One", "epic");
-        fileBackedTaskManager.createEpic(epic1);
-        Epic epic2 = new Epic("Two", "epic");
-        fileBackedTaskManager.createEpic(epic2);
-        Subtask subtask1 = new Subtask("One", "subtask", TaskStatus.DONE, epic2.getId());
-        fileBackedTaskManager.createSubtasks(subtask1);
-        Subtask subtask2 = new Subtask("Two", "subtask", TaskStatus.NEW, epic1.getId());
-        fileBackedTaskManager.createSubtasks(subtask2);
-        Subtask subtask3 = new Subtask("Two", "subtask", TaskStatus.DONE, epic1.getId());
-        fileBackedTaskManager.createSubtasks(subtask3);
-        Epic epic3 = new Epic("Three ", "epic");
-        fileBackedTaskManager.createEpic(epic3);
-
-        List<Task> allTasks = new ArrayList<>();  // создаем обобщенный список всех задач.
-        allTasks.addAll(fileBackedTaskManager.getAllTasks());
-        allTasks.addAll(fileBackedTaskManager.getAllEpics());
-        allTasks.addAll(fileBackedTaskManager.getAllSubtasks());
-        dataPrinting(allTasks);
-        allTasks.clear();
-        dataPrinting(allTasks);
-
-        FileBackedTaskManager fileBackedTaskManager1 = FileBackedTaskManager.loadFromFile(file);
-        allTasks.addAll(fileBackedTaskManager1.getAllTasks());
-        allTasks.addAll(fileBackedTaskManager1.getAllEpics());
-        allTasks.addAll(fileBackedTaskManager1.getAllSubtasks());
-        dataPrinting(allTasks);
-
-        System.out.println("Список prioritizedTasks:");
-        for (Task task : fileBackedTaskManager1.prioritizedTasks) {
-            System.out.println(task);
-        }
-    }
-
-    private static void dataPrinting(List<Task> allTasks) {  // метод для вывода результатов работы main.
-        if (!allTasks.isEmpty()) {
-            for (Task task : allTasks) {
-                System.out.println(task);
-            }
-        } else {
-            System.out.println("\n***Нет созданных задач.***\n");
-        }
-    }
+//    public static void main(String[] args) {
+//        File file = new File("autoSave.csv");
+//        FileBackedTaskManager fileBackedTaskManager = new FileBackedTaskManager(file);
+//        Task task1 = new Task("One", "task");
+//        Task task10 = new Task("One", "task");
+//        fileBackedTaskManager.createTask(task1);
+//        task1.setStartTime("12.05.2024 10:00");
+//        fileBackedTaskManager.createTask(task10);
+//        task10.setStartTime("17.03.2024 10:00");
+//        Task task2 = new Task("Two", "task");
+//        fileBackedTaskManager.createTask(task2);
+//        Epic epic1 = new Epic("One", "epic");
+//        fileBackedTaskManager.createEpic(epic1);
+//        Epic epic2 = new Epic("Two", "epic");
+//        fileBackedTaskManager.createEpic(epic2);
+//        Subtask subtask1 = new Subtask("One", "subtask", TaskStatus.DONE, epic2.getId());
+//        fileBackedTaskManager.createSubtasks(subtask1);
+//        Subtask subtask2 = new Subtask("Two", "subtask", TaskStatus.NEW, epic1.getId());
+//        fileBackedTaskManager.createSubtasks(subtask2);
+//        Subtask subtask3 = new Subtask("Two", "subtask", TaskStatus.DONE, epic1.getId());
+//        fileBackedTaskManager.createSubtasks(subtask3);
+//        Epic epic3 = new Epic("Three ", "epic");
+//        fileBackedTaskManager.createEpic(epic3);
+//
+//        List<Task> allTasks = new ArrayList<>();  // создаем обобщенный список всех задач.
+//        allTasks.addAll(fileBackedTaskManager.getAllTasks());
+//        allTasks.addAll(fileBackedTaskManager.getAllEpics());
+//        allTasks.addAll(fileBackedTaskManager.getAllSubtasks());
+//        dataPrinting(allTasks);
+//        allTasks.clear();
+//        dataPrinting(allTasks);
+//
+//        FileBackedTaskManager fileBackedTaskManager1 = FileBackedTaskManager.loadFromFile(file);
+//        allTasks.addAll(fileBackedTaskManager1.getAllTasks());
+//        allTasks.addAll(fileBackedTaskManager1.getAllEpics());
+//        allTasks.addAll(fileBackedTaskManager1.getAllSubtasks());
+//        dataPrinting(allTasks);
+//
+//        System.out.println("Список prioritizedTasks:");
+//        for (Task task : fileBackedTaskManager1.prioritizedTasks) {
+//            System.out.println(task);
+//        }
+//    }
+//
+//    private static void dataPrinting(List<Task> allTasks) {  // метод для вывода результатов работы main.
+//        if (!allTasks.isEmpty()) {
+//            for (Task task : allTasks) {
+//                System.out.println(task);
+//            }
+//        } else {
+//            System.out.println("\n***Нет созданных задач.***\n");
+//        }
+//    }
 }
