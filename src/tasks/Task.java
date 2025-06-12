@@ -14,7 +14,7 @@ public class Task {
     private String description; // 2
     private TaskStatus taskStatus; // 3
     private LocalDateTime startTime; // 4
-    private Duration duration;//5
+    private Duration duration; //5
 
     public Task(String nameTask, String description) {
         this.nameTask = nameTask;

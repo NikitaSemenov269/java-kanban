@@ -4,15 +4,19 @@ import java.time.LocalDateTime;
 import java.util.*;
 
 public class Epic extends Task {
-    private List<Integer> idSubtasks = new ArrayList<>();
+    private List<Integer> idSubtasks;
     private LocalDateTime endTime;
 
     public Epic(String nameEpic, String description) {
         super(nameEpic, description);
+        this.idSubtasks = new ArrayList<>();
     }
 
     public List<Integer> getIdSubtasks() {
-        return idSubtasks;
+        if (idSubtasks == null) {
+            return new ArrayList<>();
+        }
+        return new ArrayList<>(idSubtasks);
     }
 
     public void setEndTime(LocalDateTime endTime) {
@@ -20,8 +24,11 @@ public class Epic extends Task {
     }
 
     public boolean isAddIdSubtasks(int id) {
+        if (idSubtasks == null) {
+            idSubtasks = new ArrayList<>();
+        }
         if (!idSubtasks.contains(id)) {
-            this.idSubtasks.add(id);
+            idSubtasks.add(id);
             return true;
         }
         return false;

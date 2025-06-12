@@ -24,42 +24,42 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
         try (BufferedReader fileReader = new BufferedReader(new FileReader(file))) {
             while (fileReader.ready()) {
                 String csvLine = fileReader.readLine();
-                Task csvFormat = CSVFormat.fromString(csvLine);
+                Task task = CSVFormat.fromString(csvLine);
 
-                if (Task.class == csvFormat.getClass()) {
-                    manager.tasks.put(csvFormat.getId(), csvFormat);
+                if (task instanceof Task) {
+                    manager.tasks.put(task.getId(), task);
                     if (!manager.prioritizedTasks.isEmpty()) {
-                        if (csvFormat.getStartTime() != null && csvFormat.getEndTime() != null
-                                && csvFormat.getEndTime().isAfter(csvFormat.getStartTime())) {
-                            manager.prioritizedTasks.add(csvFormat);
+                        if (task.getStartTime() != null && task.getEndTime() != null
+                                && task.getEndTime().isAfter(task.getStartTime())) {
+                            manager.prioritizedTasks.add(task);
                         }
                     } else {
-                        manager.prioritizedTasks.add(csvFormat);
+                        manager.prioritizedTasks.add(task);
                     }
-                } else if (Epic.class == csvFormat.getClass()) {
-                    manager.epics.put(csvFormat.getId(), (Epic) csvFormat);
+                } else if (task instanceof Epic) {
+                    Epic epic = (Epic) task;
+                    manager.epics.put(epic.getId(), epic);
                     if (!manager.prioritizedTasks.isEmpty()) {
-                        if (csvFormat.getStartTime() != null && csvFormat.getEndTime() != null
-                                && csvFormat.getEndTime().isAfter(csvFormat.getStartTime())) {
-                            manager.prioritizedTasks.add(csvFormat);
+                        if (epic.getStartTime() != null && epic.getEndTime() != null
+                                && epic.getEndTime().isAfter(epic.getStartTime())) {
+                            manager.prioritizedTasks.add(epic);
                         }
                     } else {
-                        manager.prioritizedTasks.add(csvFormat);
+                        manager.prioritizedTasks.add(epic);
                     }
 
-                } else if (Subtask.class == csvFormat.getClass()) {
-                    manager.subtasks.put(csvFormat.getId(), (Subtask) csvFormat);
-                    if (csvFormat.getStartTime() != null && csvFormat.getEndTime() != null
-                            && csvFormat.getEndTime().isAfter(csvFormat.getStartTime())) {
-                        manager.prioritizedTasks.add(csvFormat);
-                        Subtask subtask = (Subtask) csvFormat;
+                } else if (task instanceof Subtask) {
+                    Subtask subtask = (Subtask) task;
+                    manager.subtasks.put(subtask.getId(), subtask);
+                    if (subtask.getStartTime() != null && subtask.getEndTime() != null
+                            && subtask.getEndTime().isAfter(subtask.getStartTime())) {
+                        manager.prioritizedTasks.add(subtask);
                         Epic epic = manager.epics.get(subtask.getIdEpic());
                         if (epic != null) {
-                            manager.prioritizedTasks.remove(manager.epics.get(((Subtask) csvFormat).getIdEpic()));
-                            manager.updateEpicTime(manager.epics.get(((Subtask) csvFormat)
-                                    .getIdEpic()));
+                            manager.prioritizedTasks.remove(manager.epics.get(subtask.getIdEpic()));
+                            manager.updateEpicTime(manager.epics.get(subtask.getIdEpic()));
                             manager.prioritizedTasks.add(manager.epics
-                                    .get(((Subtask) csvFormat).getIdEpic()));
+                                    .get(subtask.getIdEpic()));
                         }
                     }
                 }
@@ -88,7 +88,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
                             type = TaskType.TASK;
                         } else if (task.getClass() == Epic.class) {
                             type = TaskType.EPIC;
-                            idSubtasksOfEpic = "-1";
+                            idSubtasksOfEpic = "";
                             if (!((Epic) task).getIdSubtasks().isEmpty()) {
                                 String[] temporaryId = String.valueOf(((Epic) task).getIdSubtasks()).split(", ");
                                 idSubtasksOfEpic = String.join("and", temporaryId);
@@ -216,6 +216,12 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
     }
 
     @Override
+    public void updateEpicTime(Epic epic) {
+        super.updateEpicTime(epic);
+        save();
+    }
+
+    @Override
     public void updateSubtask(Subtask subtask) {
         super.updateSubtask(subtask);
         save();
@@ -248,58 +254,4 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
     public String toString() {
         return "FileBackedTaskManager{" + "tasks=" + tasks + ", subtasks=" + subtasks + ", epics=" + epics + '}';
     }
-
-//    public static void main(String[] args) {
-//        File file = new File("autoSave.csv");
-//        FileBackedTaskManager fileBackedTaskManager = new FileBackedTaskManager(file);
-//        Task task1 = new Task("One", "task");
-//        Task task10 = new Task("One", "task");
-//        fileBackedTaskManager.createTask(task1);
-//        task1.setStartTime("12.05.2024 10:00");
-//        fileBackedTaskManager.createTask(task10);
-//        task10.setStartTime("17.03.2024 10:00");
-//        Task task2 = new Task("Two", "task");
-//        fileBackedTaskManager.createTask(task2);
-//        Epic epic1 = new Epic("One", "epic");
-//        fileBackedTaskManager.createEpic(epic1);
-//        Epic epic2 = new Epic("Two", "epic");
-//        fileBackedTaskManager.createEpic(epic2);
-//        Subtask subtask1 = new Subtask("One", "subtask", TaskStatus.DONE, epic2.getId());
-//        fileBackedTaskManager.createSubtasks(subtask1);
-//        Subtask subtask2 = new Subtask("Two", "subtask", TaskStatus.NEW, epic1.getId());
-//        fileBackedTaskManager.createSubtasks(subtask2);
-//        Subtask subtask3 = new Subtask("Two", "subtask", TaskStatus.DONE, epic1.getId());
-//        fileBackedTaskManager.createSubtasks(subtask3);
-//        Epic epic3 = new Epic("Three ", "epic");
-//        fileBackedTaskManager.createEpic(epic3);
-//
-//        List<Task> allTasks = new ArrayList<>();  // создаем обобщенный список всех задач.
-//        allTasks.addAll(fileBackedTaskManager.getAllTasks());
-//        allTasks.addAll(fileBackedTaskManager.getAllEpics());
-//        allTasks.addAll(fileBackedTaskManager.getAllSubtasks());
-//        dataPrinting(allTasks);
-//        allTasks.clear();
-//        dataPrinting(allTasks);
-//
-//        FileBackedTaskManager fileBackedTaskManager1 = FileBackedTaskManager.loadFromFile(file);
-//        allTasks.addAll(fileBackedTaskManager1.getAllTasks());
-//        allTasks.addAll(fileBackedTaskManager1.getAllEpics());
-//        allTasks.addAll(fileBackedTaskManager1.getAllSubtasks());
-//        dataPrinting(allTasks);
-//
-//        System.out.println("Список prioritizedTasks:");
-//        for (Task task : fileBackedTaskManager1.prioritizedTasks) {
-//            System.out.println(task);
-//        }
-//    }
-//
-//    private static void dataPrinting(List<Task> allTasks) {  // метод для вывода результатов работы main.
-//        if (!allTasks.isEmpty()) {
-//            for (Task task : allTasks) {
-//                System.out.println(task);
-//            }
-//        } else {
-//            System.out.println("\n***Нет созданных задач.***\n");
-//        }
-//    }
 }
