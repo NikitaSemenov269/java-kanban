@@ -183,10 +183,10 @@ public class InMemoryTaskManager implements TaskManager {
                             prioritizedTasks.add(subtask);
                         }
                         prioritizedTasks.remove(epic);
-                        updateEpicStatus(epic);
                         updateEpicTime(epic);
                         prioritizedTasks.add(epic);
                     }
+                    updateEpicStatus(epic);
                 }
             }
         }

@@ -13,6 +13,7 @@ import tasks.enums.TaskStatus;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -100,6 +101,12 @@ public class EpicHandler extends BaseHttpHandler implements HttpHandler {
                 try {
                     Epic epic = gson.fromJson(reader, Epic.class);
                     epic.setDuration(0);
+                    if (epic.getStartTime() == null) {
+                        epic.setStartTime(LocalDateTime.now().format(formatter));
+                    }
+                    if (epic.getDuration() == null) {
+                        epic.setDuration(5);
+                    }
                     if (epic.getNameTask() == null || epic.getDescription() == null) {
                         sendText(exchange, 400, "{\"error\": \"Имя и описание эпика обязательны.\"}");
                         return;
@@ -107,6 +114,7 @@ public class EpicHandler extends BaseHttpHandler implements HttpHandler {
                     if (path.length == 2) {
                         epic.setTaskStatus(TaskStatus.NEW);
                         taskManager.createEpic(epic);
+
                         sendText(exchange, 200, "{\"message\": \"Эпик добавлен. Id: " + epic.getId() + "\"}");
                     } else if (path.length == 3) { // Обновление существующей задачи
                         int idEpic = Integer.parseInt(path[2]);

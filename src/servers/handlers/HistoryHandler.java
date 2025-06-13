@@ -8,10 +8,10 @@ import servers.HttpTaskServer;
 
 import java.io.IOException;
 
-public class HistiryHandler extends BaseHttpHandler implements HttpHandler {
+public class HistoryHandler extends BaseHttpHandler implements HttpHandler {
     private final HistoryManager historyManager;
 
-    public HistiryHandler(HistoryManager historyManager) {
+    public HistoryHandler(HistoryManager historyManager) {
         this.historyManager = historyManager;
     }
 

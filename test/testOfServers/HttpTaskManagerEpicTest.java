@@ -34,6 +34,8 @@ public class HttpTaskManagerEpicTest {
     public void tearDown() {
         taskServer.stop();
         manager.deleteAllEpics();
+        manager.deleteAllSubtasks();
+        manager.deleteAllTasks();
     }
 
     @Test

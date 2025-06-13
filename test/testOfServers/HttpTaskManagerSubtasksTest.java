@@ -6,12 +6,16 @@ import managers.interfaces.TaskManager;
 import org.junit.jupiter.api.*;
 import servers.HttpTaskServer;
 import tasks.Epic;
+import tasks.Subtask;
+import tasks.enums.TaskStatus;
 
 import java.io.IOException;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.time.Duration;
+import java.time.LocalDateTime;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -160,4 +164,56 @@ public class HttpTaskManagerSubtasksTest {
         assertTrue(manager.getAllEpics().isEmpty());
         System.out.println("Тест testDeleteAllEpics пройден");
     }
+    @Test
+    @Order(7)
+    public void subtaskSetDefaultTimeIfNotProvided() throws IOException, InterruptedException {
+        Epic epic = new Epic("Epic Default", "With Subtask");
+        manager.createEpic(epic);
+
+        Subtask subtask = new Subtask("Subtask 1", "Auto time", TaskStatus.NEW, epic.getId());
+        manager.createSubtasks(subtask);
+        String json = gson.toJson(subtask);
+
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create("http://localhost:8080/subtasks"))
+                .header("Content-Type", "application/json")
+                .POST(HttpRequest.BodyPublishers.ofString(json))
+                .build();
+
+        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+        assertEquals(200, response.statusCode());
+
+        Subtask stored = manager.getSubtask(subtask.getId());
+
+        assertNotNull(stored.getStartTime(), "Subtask startTime должен быть задан");
+        assertNotNull(stored.getEndTime(), "Subtask endTime должен быть рассчитан");
+        assertEquals(Duration.ofMinutes(5), stored.getDuration(), "Duration по умолчанию должен быть 5 минут");
+    }
+
+    @Test
+    @Order(8)
+    public void epicTimeDependsOnTheTimeOfSubtasks() throws IOException, InterruptedException {
+        Epic epic = new Epic("Epic With Timing", "Should update time");
+        manager.createEpic(epic);
+
+        Subtask subtask = new Subtask("Timed Subtask", "Has time", TaskStatus.NEW, epic.getId());
+        subtask.setStartTime("12.12.2023 11:11");
+        subtask.setDuration(25);
+
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create("http://localhost:8080/subtasks"))
+                .header("Content-Type", "application/json")
+                .POST(HttpRequest.BodyPublishers.ofString(gson.toJson(subtask)))
+                .build();
+
+        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+        assertEquals(200, response.statusCode());
+
+        Epic updated = manager.getEpic(epic.getId());
+
+        assertEquals(subtask.getStartTime(), updated.getStartTime(), "Epic startTime должен совпадать с сабтаском");
+        assertEquals(subtask.getStartTime().plusMinutes(25), updated.getEndTime(), "Epic endTime должен совпадать");
+        assertEquals(Duration.ofMinutes(25), updated.getDuration(), "Epic duration должен быть суммой сабтасков");
+    }
 }
+

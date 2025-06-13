@@ -15,7 +15,7 @@ import java.net.http.HttpResponse;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class HistiryHandlerTest {
+public class HistoryHandlerTest {
 
     private TaskManager manager;
     private HttpTaskServer taskServer;

@@ -50,6 +50,40 @@ abstract class TaskManagerTest<T extends TaskManager> {
     }
 
     @Test
+    void testEpicStatusAllDone() {
+        Epic epic = new Epic("Epic", "Desc");
+        taskManager.createEpic(epic);
+        Subtask sub1 = new Subtask("Sub1", "Desc1", TaskStatus.DONE, epic.getId());
+        Subtask sub2 = new Subtask("Sub2", "Desc2", TaskStatus.DONE, epic.getId());
+        taskManager.createSubtasks(sub1);
+        taskManager.createSubtasks(sub2);
+
+        assertEquals(TaskStatus.DONE, epic.getTaskStatus());
+    }
+
+    @Test
+    void testEpicStatusMixed() {
+        Epic epic = new Epic("Epic", "Desc");
+        taskManager.createEpic(epic);
+        Subtask sub1 = new Subtask("Sub1", "Desc1", TaskStatus.NEW, epic.getId());
+        Subtask sub2 = new Subtask("Sub2", "Desc2", TaskStatus.DONE, epic.getId());
+        taskManager.createSubtasks(sub1);
+        taskManager.createSubtasks(sub2);
+
+        assertEquals(TaskStatus.IN_PROGRESS, epic.getTaskStatus());
+    }
+
+    @Test
+    void testEpicStatusInProgress() {
+        Epic epic = new Epic("Epic", "Desc");
+        taskManager.createEpic(epic);
+        Subtask sub1 = new Subtask("Sub1", "Desc1", TaskStatus.IN_PROGRESS, epic.getId());
+        taskManager.createSubtasks(sub1);
+
+        assertEquals(TaskStatus.IN_PROGRESS, epic.getTaskStatus());
+    }
+
+    @Test
     void testTimeOverlap() {
         Task task1 = new Task("Task1", "Desc1");
         Task task2 = new Task("Task2", "Desc2");
