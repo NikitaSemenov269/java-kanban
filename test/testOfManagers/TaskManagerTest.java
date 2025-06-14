@@ -1,3 +1,5 @@
+package testOfManagers;
+
 import managers.*;
 import managers.interfaces.TaskManager;
 import org.junit.jupiter.api.Test;

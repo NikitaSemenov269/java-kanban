@@ -45,6 +45,9 @@ public class CSVFormat {
                 Epic epic = new Epic(value[2].trim(), value[4].trim());
                 epic.setId(Integer.parseInt(value[0].trim()));
                 epic.setTaskStatus(TaskStatus.valueOf(value[3].trim()));
+                if (epic.getIdSubtasks() == null) {
+                    epic.getIdSubtasks();   // вернет пустой список ArrayList.
+                }
                 String subtasksId = value[6];
                 if (!subtasksId.isBlank()) {
                     Arrays.stream(subtasksId.split("and"))
